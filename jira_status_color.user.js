@@ -131,26 +131,30 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 				}
 			}
 			
-           // JMD
-           // override color if label "Waiting-for-Customer" or "STOP_SUPPORT" present
-           var $labelsCell = $row.find(".labels");
-           if ($labelsCell.length > 0) {
-              var labelsText = $.trim($labelsCell.text());
-              var wfc = "Waiting-for-customer";
-              if (labelsText.indexOf(wfc) >= 0) {
-                 colorSettings =  getColorSettingsByAssignee(wfc);
-              }
-              var stopSupport = "STOP_SUPPORT";
-              if (labelsText.indexOf(stopSupport) >= 0) {
-                 colorSettings =  getColorSettingsByAssignee(stopSupport);
-              }
-           }			           
+        	// JMD
+        	// override color if label "Waiting-for-Customer", "Reponse_reçue" or "STOP_SUPPORT" present
+        	var $labelsCell = $row.find(".labels");
+        	if ($labelsCell.length > 0) {
+            	var labelsText = $.trim($labelsCell.text());
+            	var wfc = "Waiting-for-customer";
+        		if (labelsText.indexOf(wfc) >= 0) {
+            		colorSettings =  getColorSettingsByAssignee(wfc);
+            	}
+            	var stopSupport = "STOP_SUPPORT";
+            	if (labelsText.indexOf(stopSupport) >= 0) {
+                	colorSettings =  getColorSettingsByAssignee(stopSupport);
+            	}
+            	var stopSupport = "Reponse_reçue";
+            	if (labelsText.indexOf(stopSupport) >= 0) {
+                	olorSettings =  getColorSettingsByAssignee(stopSupport);
+              	}
+        	}			           
            
-           // default color if none defined
-           if (colorSettings == null) {
-              colorSettings = getColorSettingsByAssignee("Default");
-           }
-           // /JMD
+        	// default color if none defined
+        	if (colorSettings == null) {
+            	colorSettings = getColorSettingsByAssignee("Default");
+        	}
+        	// /JMD
 
 			if (colorSettings != null) {
 				$row.css("background-color", colorSettings.color);
@@ -226,15 +230,16 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 		var colorRedBright = "#ff4550";
 		var colorViolet = "#e3b7eb";
 		var colorBlack = "#000000";
-        // JMD
-        var colorYellowLight = "#fffae0";
-        var colorGreyLight = "#f2f2f2";
-        var colorVioletLight = "#f2dbf9";
-        var colorOrangeLight= "#f2e3c6";
-        var colorOrange= "#ffd366";
-        var colorWhite= "#ffffff";
-        var colorRedDark= "#D82020";
-        // /JMD
+        	// JMD
+        	var colorRedLight = "#e5a0a0;
+        	var colorYellowLight = "#fffae0";
+        	var colorGreyLight = "#f2f2f2";
+        	var colorVioletLight = "#f2dbf9";
+        	var colorOrangeLight= "#f2e3c6";
+        	var colorOrange= "#ffd366";
+        	var colorWhite= "#ffffff";
+        	var colorRedDark= "#D82020";
+        	// /JMD
        
 		
 		statusColorSettings = {
@@ -251,6 +256,7 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
                {name: "Default",              color: colorRed, colorText: colorBlack},
                {name: "Waiting-for-customer", color: colorWhite, colorText: colorBlack},
                {name: "STOP_SUPPORT",         color: colorRed, colorText: colorBlack},
+               {name: "Reponse_reçue",        color: colorOrange, colorText: colorBlack},
                {name: "Jean-Marc Delatre",    color: colorYellowLight, colorText: colorBlack},
                {name: "AC-support",           color: colorOrangeLight, colorText: colorBlack},
                {name: "Nicolas Pasquet",      color: colorGreyLight, colorText: colorBlack},
