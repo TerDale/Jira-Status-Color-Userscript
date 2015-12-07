@@ -1,12 +1,15 @@
-﻿// ==UserScript==
+// ==UserScript==
 // @name            JIRA Status Color
 // @description     Script allows you to color Issues by status in JIRA v6.0
 // @namespace       https://github.com/AntonPalyok
 // @author          Anton Palyok
-// @version         3.0
-// @include	        */issues/*
-// @include         */browse/*
-// @include         */plugins/servlet/gadgets/ifr*
+// JMD
+// @version         3.1
+// @include	        http://jira.oodrive.net/issues/*
+// @include         http://jira.oodrive.net/browse/*
+// @include         http://jira.oodrive.net/plugins/servlet/gadgets/ifr*
+// @grant           unsafeWindow
+// /JMD
 // ==/UserScript==
 
 // you can improve perfomance a bit by using full domain name in URL part of @include section
@@ -128,13 +131,34 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 				}
 			}
 			
+           // JMD
+           // override color if label "Waiting-for-Customer" or "STOP_SUPPORT" present
+           var $labelsCell = $row.find(".labels");
+           if ($labelsCell.length > 0) {
+              var labelsText = $.trim($labelsCell.text());
+              var wfc = "Waiting-for-customer";
+              if (labelsText.indexOf(wfc) >= 0) {
+                 colorSettings =  getColorSettingsByAssignee(wfc);
+              }
+              var stopSupport = "STOP_SUPPORT";
+              if (labelsText.indexOf(stopSupport) >= 0) {
+                 colorSettings =  getColorSettingsByAssignee(stopSupport);
+              }
+           }			           
+           
+           // default color if none defined
+           if (colorSettings == null) {
+              colorSettings = getColorSettingsByAssignee("Default");
+           }
+           // /JMD
+
 			if (colorSettings != null) {
 				$row.css("background-color", colorSettings.color);
 				$row.find("a").css("color", colorSettings.colorText);
 			}
 		}
 	}
-	
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 	function colorIssueList() {
 		var $issueRows = $(".issue-list > li");
 		
@@ -177,9 +201,11 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 			var colorSettings;
 			var $row = $issueRows.eq(i);
 			
-			var $statusCell = $row.find(".status").find("img");
+			// var $statusCell = $row.find(".status").find("img");
+           var $statusCell = $row.find(".status");
 			if ($statusCell.length > 0) {
-				var alt = $statusCell.attr("alt");
+				// var alt = $statusCell.attr("alt");
+                var alt = $statusCell.attr("id");
 				var statusText = alt.substr(0, alt.indexOf(" - "));
 				colorSettings = getColorSettingsByStatus(statusText);
 			}
@@ -200,6 +226,16 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 		var colorRedBright = "#ff4550";
 		var colorViolet = "#e3b7eb";
 		var colorBlack = "#000000";
+        // JMD
+        var colorYellowLight = "#fffae0";
+        var colorGreyLight = "#f2f2f2";
+        var colorVioletLight = "#f2dbf9";
+        var colorOrangeLight= "#f2e3c6";
+        var colorOrange= "#ffd366";
+        var colorWhite= "#ffffff";
+        var colorRedDark= "#D82020";
+        // /JMD
+       
 		
 		statusColorSettings = {
 			statusColors: [
@@ -210,9 +246,25 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 				{ name: "Reopened",    color: colorViolet, colorText: colorBlack }
 			],
 			assigneeColors: [
-				{name: "Unassigned",   color: colorRedBright, colorText: colorBlack}
+               {name: "Unassigned",         color: colorOrange, colorText: colorBlack},
+               // JMD
+               {name: "Default",              color: colorRed, colorText: colorBlack},
+               {name: "Waiting-for-customer", color: colorWhite, colorText: colorBlack},
+               {name: "STOP_SUPPORT",         color: colorRed, colorText: colorBlack},
+               {name: "Jean-Marc Delatre",    color: colorYellowLight, colorText: colorBlack},
+               {name: "AC-support",           color: colorOrangeLight, colorText: colorBlack},
+               {name: "Nicolas Pasquet",      color: colorGreyLight, colorText: colorBlack},
+               {name: "Jean-Michel Drean",    color: colorGreyLight, colorText: colorBlack},
+               {name: "Julien Foulon",        color: colorGreyLight, colorText: colorBlack},
+               {name: "Mickael Lanoe",        color: colorGreyLight, colorText: colorBlack},
+               {name: "Soazig David",         color: colorGreyLight, colorText: colorBlack},
+               {name: "Oliver Briec",         color: colorGreyLight, colorText: colorBlack},
+               {name: "Olivier Briec",        color: colorGreyLight, colorText: colorBlack},
+               {name: "Eric Allegrini",       color: colorGreyLight, colorText: colorBlack},
+               {name: "Pierre Robelot",       color: colorGreyLight, colorText: colorBlack}               
+               // /JMD
 			],
-			colorByAssignee: false
+			colorByAssignee: true
 		};
 	}
 	
