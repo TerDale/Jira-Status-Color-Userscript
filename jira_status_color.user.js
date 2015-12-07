@@ -4,7 +4,7 @@
 // @namespace       https://github.com/AntonPalyok
 // @author          Anton Palyok
 // JMD
-// @version         3.1
+// @version         3.1.1
 // @include	        http://jira.oodrive.net/issues/*
 // @include         http://jira.oodrive.net/browse/*
 // @include         http://jira.oodrive.net/plugins/servlet/gadgets/ifr*
