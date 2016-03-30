@@ -4,7 +4,7 @@
 // @namespace       https://github.com/AntonPalyok
 // @author          Anton Palyok
 // JMD
-// @version         3.1.1
+// @version         3.2.1
 // @include	        http://jira.oodrive.net/issues/*
 // @include         http://jira.oodrive.net/browse/*
 // @include         http://jira.oodrive.net/plugins/servlet/gadgets/ifr*
@@ -131,30 +131,45 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 				}
 			}
 			
-        	// JMD
-        	// override color if label "Waiting-for-Customer", "Reponse_reçue" or "STOP_SUPPORT" present
-        	var $labelsCell = $row.find(".labels");
-        	if ($labelsCell.length > 0) {
-            	var labelsText = $.trim($labelsCell.text());
-            	var wfc = "Waiting-for-customer";
-        		if (labelsText.indexOf(wfc) >= 0) {
-            		colorSettings =  getColorSettingsByAssignee(wfc);
-            	}
-            	var stopSupport = "STOP_SUPPORT";
-            	if (labelsText.indexOf(stopSupport) >= 0) {
-                	colorSettings =  getColorSettingsByAssignee(stopSupport);
-            	}
-            	var stopSupport = "Reponse_reçue";
-            	if (labelsText.indexOf(stopSupport) >= 0) {
-                	olorSettings =  getColorSettingsByAssignee(stopSupport);
-              	}
-        	}			           
+           // JMD
+           // override color depending on label only for JMD or AC-support
+			var $assigneeCell = $row.find(".assignee");
+			if ($assigneeCell.length > 0) {
+				var assigneeText = $.trim($assigneeCell.text());
+				if ((assigneeText.indexOf("Jean-Marc Delatre") >= 0) || (assigneeText.indexOf("AC-support") >= 0)) {
+					var $labelsCell = $row.find(".labels");
+					if ($labelsCell.length > 0) {
+						var labelsText = $.trim($labelsCell.text());
+						var labelsText = $.trim($labelsCell.text());
+						var wfc = "AC_WAIT";
+						if (labelsText.indexOf(wfc) >= 0) {
+							colorSettings =  getColorSettingsByAssignee(wfc);
+						}
+						var close = "AC_CLOSE";
+						if (labelsText.indexOf(close) >= 0) {
+							colorSettings =  getColorSettingsByAssignee(close);
+						}
+						var stopSupport = "STOP_SUPPORT";
+						if (labelsText.indexOf(stopSupport) >= 0) {
+							colorSettings =  getColorSettingsByAssignee(stopSupport);
+						}
+						var reply = "AC_ANSWERED";
+						if (labelsText.indexOf(reply) >= 0) {
+							colorSettings =  getColorSettingsByAssignee(reply);
+						}
+						var reply = "AC_NOTIFY"
+						if (labelsText.indexOf(reply) >= 0) {
+							colorSettings =  getColorSettingsByAssignee(reply);
+						}
+					}			           
+				}
+			}
            
-        	// default color if none defined
-        	if (colorSettings == null) {
-            	colorSettings = getColorSettingsByAssignee("Default");
-        	}
-        	// /JMD
+           // default color if none defined
+           if (colorSettings == null) {
+              colorSettings = getColorSettingsByAssignee("Default");
+           }
+           // /JMD
 
 			if (colorSettings != null) {
 				$row.css("background-color", colorSettings.color);
@@ -223,50 +238,61 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 	
 	function initStatusColors() {
 		var colorRed = "#fcbdbd";
+		var colorLavender = "#E5C9F5";
 		var colorGreen = "#d2f5b0";
 		var colorBlue = "#c2dfff";
 		var colorYellow = "#fff494";
-		var colorGrey = "#cccccc";
+		var colorGrey = "#afafaf";
 		var colorRedBright = "#ff4550";
 		var colorViolet = "#e3b7eb";
 		var colorBlack = "#000000";
-        	// JMD
-        	var colorRedLight = "#e5a0a0;
-        	var colorYellowLight = "#fffae0";
-        	var colorGreyLight = "#f2f2f2";
-        	var colorVioletLight = "#f2dbf9";
-        	var colorOrangeLight= "#f2e3c6";
-        	var colorOrange= "#ffd366";
-        	var colorWhite= "#ffffff";
-        	var colorRedDark= "#D82020";
-        	// /JMD
+        // JMD
+        var colorYellowLight = "#fffae0";
+        var colorGreyLight = "#e8e8e8";
+        var colorVioletLight = "#f2dbf9";
+        var colorOrangeLight= "#f2e3c6";
+		var colorOrangeMedium= "#efdda0";
+        var colorOrange= "#ffb711";
+        var colorWhite= "#ffffff";
+        var colorRedDark= "#D82020";
+		var colorIceberg = "#c0d8db";
+        // /JMD
        
 		
 		statusColorSettings = {
 			statusColors: [
-				{ name: "Open",        color: colorRed,   colorText: colorBlack },
-				{ name: "In Progress", color: colorBlue,  colorText: colorBlack },
+				{ name: "Open",        color: colorOrangeMedium,   colorText: colorBlack },
+				{ name: "In Progress", color: colorOrangeLight,  colorText: colorBlack },
 				{ name: "Resolved",    color: colorGreen, colorText: colorBlack },
-				{ name: "Closed",      color: colorGrey,  colorText: colorBlack },
-				{ name: "Reopened",    color: colorViolet, colorText: colorBlack }
+				{ name: "Closed",      color: colorGreen,  colorText: colorBlack },
+				{ name: "Reopened",    color: colorOrangeMedium, colorText: colorBlack },
+				{ name: "Non Resolu",  color: colorYellowLight, colorText: colorBlack }
 			],
 			assigneeColors: [
-               {name: "Unassigned",         color: colorOrange, colorText: colorBlack},
+               {name: "Unassigned",         color: colorLavender, colorText: colorBlack},
                // JMD
-               {name: "Default",              color: colorRed, colorText: colorBlack},
+               {name: "Default",              color: colorGrey, colorText: colorBlack},
                {name: "Waiting-for-customer", color: colorWhite, colorText: colorBlack},
-               {name: "STOP_SUPPORT",         color: colorRed, colorText: colorBlack},
-               {name: "Reponse_reçue",        color: colorOrange, colorText: colorBlack},
-               {name: "Jean-Marc Delatre",    color: colorYellowLight, colorText: colorBlack},
-               {name: "AC-support",           color: colorOrangeLight, colorText: colorBlack},
+			   {name: "AC_WAIT",           color: colorWhite, colorText: colorBlack},
+			   {name: "Close",                color: colorGreyLight, colorText: colorGrey},
+			   {name: "AC_CLOSE",             color: colorGreyLight, colorText: colorGrey},
+			   {name: "Reponse_reçue",        color: colorOrangeMedium, colorText: colorBlack},
+			   {name: "AC_ANSWERED",          color: colorOrangeMedium, colorText: colorBlack},
+			   {name: "Notifier",             color: colorIceberg, colorText: colorBlack},
+			   {name: "AC_NOTIFY",            color: colorIceberg, colorText: colorBlack},
+               {name: "STOP_SUPPORT",         color: colorRedBright, colorText: colorBlack},
+               {name: "Jean-Marc Delatre",    color: colorOrangeLight, colorText: colorBlack},
+               {name: "AC-support",           color: colorYellowLight, colorText: colorBlack},
                {name: "Nicolas Pasquet",      color: colorGreyLight, colorText: colorBlack},
                {name: "Jean-Michel Drean",    color: colorGreyLight, colorText: colorBlack},
                {name: "Julien Foulon",        color: colorGreyLight, colorText: colorBlack},
                {name: "Mickael Lanoe",        color: colorGreyLight, colorText: colorBlack},
                {name: "Soazig David",         color: colorGreyLight, colorText: colorBlack},
+			   {name: "Fabien Bousquet",       color: colorGreyLight, colorText: colorBlack},
                {name: "Oliver Briec",         color: colorGreyLight, colorText: colorBlack},
                {name: "Olivier Briec",        color: colorGreyLight, colorText: colorBlack},
                {name: "Eric Allegrini",       color: colorGreyLight, colorText: colorBlack},
+			   {name: "Laurent Bouchet",       color: colorGreyLight, colorText: colorBlack},
                {name: "Pierre Robelot",       color: colorGreyLight, colorText: colorBlack}               
                // /JMD
 			],
