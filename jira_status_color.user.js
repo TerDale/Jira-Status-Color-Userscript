@@ -239,7 +239,7 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 	function initStatusColors() {
 		var colorRed = "#fcbdbd";
 		var colorLavender = "#E5C9F5";
-		var colorGreen = "#d2f5b0";
+		var colorGreen = "#f3fce9";
 		var colorBlue = "#c2dfff";
 		var colorYellow = "#fff494";
 		var colorGrey = "#afafaf";
