@@ -266,7 +266,7 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
 				{ name: "Resolved",    color: colorGreen, colorText: colorBlack },
 				{ name: "Closed",      color: colorGreen,  colorText: colorBlack },
 				{ name: "Reopened",    color: colorOrangeMedium, colorText: colorBlack },
-				{ name: "Non Resolu",  color: colorYellowLight, colorText: colorBlack }
+				{ name: "non resolu",  color: colorYellowLight, colorText: colorBlack }
 			],
 			assigneeColors: [
                {name: "Unassigned",         color: colorLavender, colorText: colorBlack},
